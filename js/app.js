@@ -143,6 +143,8 @@ new Vue({
         <div class="task-form">
             <input v-model="newTask.title" placeholder="Название">
             <input v-model="newTask.description" placeholder="Описание">
+            <input type="date" v-model="newTask.deadline">
+            <button @click="addTask">Добавить задачу</button>
         </div>
         <div class="board">
             <task-column v-for="(column, index) in columns" 
