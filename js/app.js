@@ -7,6 +7,8 @@ Vue.component('task-card', {
         <p>Дэдлайн: {{ task.deadline }}</p>
         <p>Создано: {{ task.createdAt }}</p>
         <p>Последнее изменение: {{ task.lastEdited }}</p>
+        <button @click="$emit('delete-task', task, colIndex)">Удалить</button>
+        <button v-if="colIndex < columnsLength - 1" @click="$emit('move-task', task, colIndex, colIndex + 1)">Далее</button>
     </div>
     `
 });
@@ -23,6 +25,8 @@ Vue.component('task-column', {
                 :task="task"
                 :colIndex="index"
                 :columnsLength="columnsLength"
+                @delete-task="$emit('delete-task', $event, index)"
+                @move-task="$emit('move-task', $event, $event1, $event2)"
             ></task-card>
         </div>
     </div>
@@ -55,6 +59,17 @@ new Vue({
             });
             this.newTask = { title: '', description: '', deadline: '' };
             this.saveToLocalStorage();
+        },
+        deleteTask(task, colIndex) {
+            this.columns[colIndex].tasks = this.columns[colIndex].tasks.filter(t => t !== task);
+            this.saveToLocalStorage();
+        },
+        moveTask(task, fromColumn, toColumn) {
+            if (toColumn >= this.columns.length) return;
+            this.columns[fromColumn].tasks = this.columns[fromColumn].tasks.filter(t => t !== task);
+            this.columns[toColumn].tasks.push(task);
+            task.lastEdited = new Date().toLocaleString();
+            this.saveToLocalStorage();
         }
     },
     template: `
@@ -72,6 +87,8 @@ new Vue({
                 :column="column"
                 :index="index"
                 :columnsLength="columns.length"
+                @delete-task="deleteTask"
+                @move-task="moveTask"
             ></task-column>
         </div>
     </div>
