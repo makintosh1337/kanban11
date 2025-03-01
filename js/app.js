@@ -1,8 +1,28 @@
+Vue.component('task-card', {
+    props: ['task', 'colIndex', 'columnsLength'],
+    template: `
+    <div class="task">
+        <p>{{ task.title }}</p>
+        <p>{{ task.description }}</p>
+        <p>Дэдлайн: {{ task.deadline }}</p>
+    </div>
+    `
+});
+
 Vue.component('task-column', {
     props: ['column', 'index', 'columnsLength'],
     template: `
     <div class="column">
         <h3>{{ column.title }}</h3>
+        <div class="tasks">
+            <task-card
+                v-for="(task, taskIndex) in column.tasks"
+                :key="taskIndex"
+                :task="task"
+                :colIndex="index"
+                :columnsLength="columnsLength"
+            ></task-card>
+        </div>
     </div>
     `
 });
