@@ -5,6 +5,8 @@ Vue.component('task-card', {
         <p>{{ task.title }}</p>
         <p>{{ task.description }}</p>
         <p>Дэдлайн: {{ task.deadline }}</p>
+        <p>Создано: {{ task.createdAt }}</p>
+        <p>Последнее изменение: {{ task.lastEdited }}</p>
     </div>
     `
 });
@@ -36,16 +38,33 @@ new Vue({
                 { title: 'В работе', tasks: [] },
                 { title: 'Тестирование', tasks: [] },
                 { title: 'Выполненные задачи', tasks: [] }
-            ]
+            ],
+            newTask: { title: '', description: '', deadline: '' }
         };
     },
     methods: {
         saveToLocalStorage() {
             localStorage.setItem('kanbanColumns', JSON.stringify(this.columns));
+        },
+        addTask() {
+            if (!this.newTask.title || !this.newTask.description || !this.newTask.deadline) return;
+            this.columns[0].tasks.push({
+                ...this.newTask,
+                createdAt: new Date().toLocaleString(),
+                lastEdited: new Date().toLocaleString()
+            });
+            this.newTask = { title: '', description: '', deadline: '' };
+            this.saveToLocalStorage();
         }
     },
     template: `
     <div id="app">
+        <div class="task-form">
+            <input v-model="newTask.title" placeholder="Название">
+            <input v-model="newTask.description" placeholder="Описание">
+            <input type="date" v-model="newTask.deadline">
+            <button @click="addTask">Добавить задачу</button>
+        </div>
         <div class="columns">
             <task-column
                 v-for="(column, index) in columns"
