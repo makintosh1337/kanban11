@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #f4f4f4, #e0e0e0);
 }
 
 #app {
@@ -27,25 +27,26 @@ body {
     margin-bottom: 10px;
     padding: 10px;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 25px;
     border: 1px solid #ccc;
 }
 
 .task-form input:focus {
     outline: none;
-    border-color: #6200ea;
+    border-color: #2196F3;
 }
 
 .task-form button {
-    background: #6200ea;
+    background: linear-gradient(135deg, #2196F3, #1976D2);
     color: white;
     border: none;
     cursor: pointer;
     font-weight: bold;
+    border-radius: 25px;
 }
 
 .task-form button:hover {
-    background: #4500b5;
+    background: linear-gradient(135deg, #1976D2, #2196F3);
 }
 
 .board {
@@ -61,4 +62,42 @@ body {
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    text-align: center;
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    padding: 10px;
+    border-radius: 25px;
+}
+
+.task {
+    background: #e3e3e3;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    border: none;
+    padding: 8px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-radius: 25px;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #1976D2, #2196F3);
+}
+
+.completed {
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+}
+
+.overdue {
+    background: linear-gradient(135deg, #b73149, #8a1c2e);
 }

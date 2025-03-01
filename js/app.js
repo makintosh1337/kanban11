@@ -1,5 +1,21 @@
 Vue.component('task-card', {
     props: ['task', 'colIndex', 'columnsLength'],
+    data() {
+        return {
+            returnReason: ''
+        };
+    },
+    methods: {
+        returnTask() {
+            if (!this.returnReason.trim()) {
+                alert('Укажите причину возврата');
+                return;
+            }
+            this.task.returnReason = this.returnReason;
+            this.$emit('return-task', this.task, this.colIndex, this.returnReason);
+            this.returnReason = '';
+        }
+    },
     template: `
     <div class="task">
         <p>{{ task.title }}</p>
@@ -9,12 +25,23 @@ Vue.component('task-card', {
         <p>Последнее изменение: {{ task.lastEdited }}</p>
         <button @click="$emit('delete-task', task, colIndex)">Удалить</button>
         <button v-if="colIndex < columnsLength - 1" @click="$emit('move-task', task, colIndex, colIndex + 1)">Далее</button>
+        <div v-if="colIndex === 2">
+            <textarea v-model="returnReason" placeholder="Причина возврата"></textarea>
+            <button @click="returnTask">Вернуть</button>
+        </div>
     </div>
     `
 });
 
 Vue.component('task-column', {
     props: ['column', 'index', 'columnsLength'],
+    methods: {
+        returnTask(task, colIndex, reason) {
+            this.$emit('move-task', task, colIndex, 1);
+            task.returnReason = reason;
+            this.$emit('update-storage');
+        }
+    },
     template: `
     <div class="column">
         <h3>{{ column.title }}</h3>
@@ -27,6 +54,7 @@ Vue.component('task-column', {
                 :columnsLength="columnsLength"
                 @delete-task="$emit('delete-task', $event, index)"
                 @move-task="$emit('move-task', $event, $event1, $event2)"
+                @return-task="returnTask"
             ></task-card>
         </div>
     </div>
@@ -89,6 +117,7 @@ new Vue({
                 :columnsLength="columns.length"
                 @delete-task="deleteTask"
                 @move-task="moveTask"
+                @update-storage="saveToLocalStorage"
             ></task-column>
         </div>
     </div>
